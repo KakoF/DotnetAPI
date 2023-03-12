@@ -35,6 +35,7 @@ namespace Infra.DataConnector
         public void Dispose()
         {
             dbConnection.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

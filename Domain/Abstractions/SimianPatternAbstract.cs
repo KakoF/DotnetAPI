@@ -9,7 +9,7 @@ namespace Domain.Abstractions
 
         public SimianPatternAbstract()
         {
-            DefaultPattern = new Regex(@"(a{4}|c{4}|t{4}|g{4})", RegexOptions.IgnoreCase);
+            DefaultPattern = new Regex(@"(a{4}|c{4}|t{4}|g{4})", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
 
         public abstract bool[] CheckPattern(string[] dna);
