@@ -1,0 +1,95 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres
+    volumes:
+      - ./scripts/create_table.sql:/docker-entrypoint-initdb.d/create_table.sql
+      - ./scripts/insert_values.sql:/docker-entrypoint-initdb.d/insert_values.sql
+      - ./scripts/function_trigger.sql:/docker-entrypoint-initdb.d/function_trigger.sql
+    environment:
+      POSTGRES_PASSWORD: simian_123456
+      POSTGRES_USER: simian_user
+      POSTGRES_DB: estudo_caso
+    ports:
+      - '5432:5432'
+    expose:
+      - '5432'
+  
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: simian_user
+      MONGO_INITDB_ROOT_PASSWORD: simian_123456
+    ports:
+      - "27017:27017"
+    command: mongod --bind_ip 0.0.0.0
+
+  redis:
+    container_name: 'redis_server'
+    image: redis
+    restart: always
+    command: redis-server --requirepass SimianApplication@#
+    ports:
+      - '6379:6379'
+  
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: simian_user
+      ME_CONFIG_MONGODB_ADMINPASSWORD: simian_123456
+      ME_CONFIG_MONGODB_URL: mongodb://simian_user:simian_123456@mongo:27017/
+  
+  prometheus:
+    image: prom/prometheus:latest
+    user: root
+    container_name: prometheus
+    hostname: prometheus
+    restart: unless-stopped
+    #network_mode: host
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    #extra_hosts:
+    #  - "host.docker.internal:host-gateway"
+    ports:
+      - 9090:9090
+    networks:
+      - metrics
+  
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    hostname: grafana
+    environment:
+      -  GF_SECURITY_ADMIN_PASSWORD=admin
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    networks:
+      - metrics
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+        - rabbitmq_net
+
+volumes:
+  prometheus_data: {}
+networks:
+  rabbitmq_net:
+    driver: bridge
+  metrics:
+    driver: bridge
