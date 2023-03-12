@@ -9,7 +9,7 @@ namespace Domain.Interfaces.Notifications
         IReadOnlyCollection<Notification> GetNotifications();
         public List<object> GetNotificationsErrors();
         string GetMessage();
-        int GetStatusCode();
+        int? GetStatusCode();
         void AddNotification(string message, string error);
         void AddNotification(int statusCode, string message, string error);
         void AddNotification(T notification);

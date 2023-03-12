@@ -12,9 +12,9 @@ namespace Domain.Notifications
         }
         public bool HasNotification() => _notifications.Any();
 
-        public string GetMessage() => _notifications.LastOrDefault().Message;
+        public string GetMessage() => _notifications?.LastOrDefault()?.Message;
 
-        public int GetStatusCode() => _notifications.LastOrDefault().StatusCode;
+        public int? GetStatusCode() => _notifications?.LastOrDefault()?.StatusCode;
 
         public IReadOnlyCollection<Notification> GetNotifications() => _notifications;
 

@@ -18,10 +18,10 @@ namespace SimianApplication.Helpers.Filters
 
             if (_notification.HasNotification())
             {
-                context.HttpContext.Response.StatusCode = _notification.GetStatusCode();
+                context.HttpContext.Response.StatusCode = Convert.ToInt32(_notification.GetStatusCode());
                 context.HttpContext.Response.ContentType = "application/json";
 
-                var result = new ErrorResponse(_notification.GetStatusCode(), _notification.GetMessage(), _notification.GetNotificationsErrors());
+                var result = new ErrorResponse(Convert.ToInt32(_notification.GetStatusCode()), _notification.GetMessage(), _notification.GetNotificationsErrors());
                 var notifications = JsonConvert.SerializeObject(result);
                 await context.HttpContext.Response.WriteAsync(notifications);
 
