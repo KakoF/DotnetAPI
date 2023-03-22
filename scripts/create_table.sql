@@ -18,3 +18,19 @@ CREATE TABLE IF NOT EXISTS SimianCalc (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS ChuckNorris (
+    id VARCHAR (250) NOT NULL PRIMARY KEY UNIQUE,
+    categories  TEXT NULL,
+    createdAt  VARCHAR (250) NULL,
+    iconUrl  TEXT NULL,
+    updatedAt  VARCHAR (250) NULL,
+    url  TEXT NULL,
+    value  TEXT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Slip (
+    id SERIAL PRIMARY KEY UNIQUE,
+    advice TEXT NULL
+);
+
