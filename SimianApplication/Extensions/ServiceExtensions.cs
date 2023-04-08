@@ -73,6 +73,25 @@ namespace SimianApplication.Extensions
                 client.BaseAddress = new Uri(builder.Configuration["Clients:ChuckNorris:basePath"]);
             });
 
+            /*services.AddHttpClient<ITypedClient, TypedClient>()
+            .ConfigureHttpClient((serviceProvider, httpClient) =>
+            {
+                var clientConfig = serviceProvider.GetRequiredService<ITypedClientConfig>();
+                httpClient.BaseAddress = clientConfig.BaseUrl;
+                httpClient.Timeout = TimeSpan.FromSeconds(clientConfig.Timeout);
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "BlahAgent");
+                httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+            })
+            .SetHandlerLifetime(TimeSpan.FromMinutes(5))    // Default is 2 mins
+            .ConfigurePrimaryHttpMessageHandler(x =>
+                new HttpClientHandler
+                {
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                    UseCookies = false,
+                    AllowAutoRedirect = false,
+                    UseDefaultCredentials = true,
+                });*/
+
             return services;
         }
     }
